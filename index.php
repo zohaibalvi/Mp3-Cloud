@@ -5,9 +5,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://api.html5media.info/1.1.8/html5media.min.js"></script>
 <link rel="stylesheet" href="bootstrap/css/style.css" />
-<!-- Latest compiled and minified CSS -->
-<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
-<!-- Latest compiled JavaScript -->
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </head>
@@ -49,7 +47,7 @@
 // filesize("https://ia802900.us.archive.org/16/items/mythium/AC_ATI.mp3");exit;
 // include('MP3File.php');
 
-// $mp3file = new MP3File("https://ia802900.us.archive.org/16/items/mythium/AC_ATI.mp3");//http://www.npr.org/rss/podcast.php?id=510282
+// $mp3file = new MP3File("https://ia802900.us.archive.org/16/items/mythium/AC_ATI.mp3");
 // // $duration1 = $mp3file->getDurationEstimate();//(faster) for CBR only
 // $duration2 = $mp3file->getDuration();//(slower) for VBR (or CBR)
 // // echo "duration: $duration1 seconds"."\n";
