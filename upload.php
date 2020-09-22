@@ -44,7 +44,7 @@
       </div>
     <?php endif ?>
 
-<form method="post" action="register.php">
+<form method="post" action="upload.php" enctype="multipart/form-data">
    
     <div class="input-group">
       <label>Song Title</label>
@@ -60,7 +60,7 @@
     </div>
     <div class="input-group">
       <label>Upload Song </label>
-      <input type="file" name="upload_song">
+      <input type="file" name="fileToUpload">
     </div>
     <div class="input-group">
       <button type="submit" class="btn" name="upload">Upload</button>

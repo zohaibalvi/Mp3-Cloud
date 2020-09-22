@@ -1,4 +1,5 @@
 <?php
+include ('aws/s3.php');
 session_start();
 
 // initializing variables
@@ -85,10 +86,15 @@ if (isset($_POST['login_user'])) {
 
 // upload 
 if (isset($_POST['upload'])) {
+  $file_path = $_FILES["fileToUpload"]["tmp_name"];
+  $path = $_FILES['fileToUpload']['name'];
+  echo "<br>";
+$file_format = pathinfo($path, PATHINFO_EXTENSION);
+
   // receive all input values from the form
   $song_title = mysqli_real_escape_string($db, $_POST['song_title']);
   $file_name = mysqli_real_escape_string($db, $_POST['file_name']);
-  $file_format = mysqli_real_escape_string($db, $_POST['file_format']);
+  $file_format = $file_format; //mysqli_real_escape_string($db, $_POST['file_format']);
 
 
   // form validation: ensure that the form is correctly filled ...
@@ -104,6 +110,10 @@ if (isset($_POST['upload'])) {
     $query = "INSERT INTO upload_songs (song_title, file_name, file_format) 
           VALUES('$song_title', '$file_name', '$file_format')";
     mysqli_query($db, $query);
+
+
+     uploadFileIntoS3($file_path,$_POST['file_name'].'.'.$file_format);
+
     // $_SESSION['song_title'] = $username;
     // $_SESSION['success'] = "You are now logged in";
     header('location: upload.php');
