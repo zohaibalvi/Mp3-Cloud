@@ -111,7 +111,8 @@ $file_format = pathinfo($path, PATHINFO_EXTENSION);
           VALUES('$song_title', '$file_name', '$file_format')";
     mysqli_query($db, $query);
 
-
+// print_r($_FILES);
+// exit;
      uploadFileIntoS3($file_path,$_POST['file_name'].'.'.$file_format);
 
     // $_SESSION['song_title'] = $username;
