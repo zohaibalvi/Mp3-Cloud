@@ -415,9 +415,9 @@ class CredentialProvider
      */
     public static function ini($profile = null, $filename = null, array $config = [])
     {
-        $filename = $filename ?: (self::getHomeDir() . '/.aws/credentials');
+        $filename = $filename ?: (dirname(__FILE__) . '/.aws/credentials');
         $profile = $profile ?: (getenv(self::ENV_PROFILE) ?: 'default');
-
+print_r(dirname(__FILE__));
         return function () use ($profile, $filename, $config) {
             $preferStaticCredentials = isset($config['preferStaticCredentials'])
                 ? $config['preferStaticCredentials']
