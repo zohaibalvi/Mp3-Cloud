@@ -28,7 +28,7 @@ $credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACC
         'profile' => 'default',
         'version'     => 'latest',
         'region'      => REGION,
-        'credentials' => $credentials
+        // 'credentials' => $credentials
     ]);
 
 echo describeAlarms($cloudWatchClient);
