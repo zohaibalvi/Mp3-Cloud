@@ -181,7 +181,7 @@ echo -e " Permissions have been set "
 sudo chmod a+rwx /var/www/html
 
 #clone project
-git clone https://github.com/tutsplus/how-to-upload-a-file-in-php-with-example.git /var/www/html/test/
+git clone git clone https://zohaibsyed@bitbucket.org/zohaibsyed/mp3.git /var/www/html/
 
 
 # Enabling Mod Rewrite, required for WordPress permalinks and .htaccess files
