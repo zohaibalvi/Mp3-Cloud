@@ -115,14 +115,16 @@ $file_path = $argv[1];
 $key = $file_name;    //basename($argv[1]);
 
 try {
-
+print_r(2222222222222222222);
 $credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
+print_r(333333333333333);
 
 $s3 = new Aws\S3\S3Client([
     'version'     => 'latest',
     'region'      => REGION,
     'credentials' => $credentials
 ]);
+print_r(55555555555555);
 
     $result = $s3->putObject([
         'Bucket' => $bucket,
