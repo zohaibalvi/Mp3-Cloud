@@ -89,7 +89,7 @@ if (isset($_POST['login_user'])) {
 if (isset($_POST['upload'])) {
   $file_path = $_FILES["fileToUpload"]["tmp_name"];
   $path = $_FILES['fileToUpload']['name'];
-  echo "<br>";
+  // echo "<br>";
 $file_format = pathinfo($path, PATHINFO_EXTENSION);
 
   // receive all input values from the form
@@ -106,14 +106,14 @@ $file_format = pathinfo($path, PATHINFO_EXTENSION);
   
 
   // Finally, register user if there are no errors in the form
+print_r($_FILES);
+exit;
   if (count($errors) == 0) {
 
     $query = "INSERT INTO upload_songs (song_title, file_name, file_format) 
           VALUES('$song_title', '$file_name', '$file_format')";
     mysqli_query($conn, $query);
 
-// print_r($_FILES);
-// exit;
      uploadFileIntoS3($file_path,$_POST['file_name'].'.'.$file_format);
 
     // $_SESSION['song_title'] = $username;
