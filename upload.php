@@ -18,60 +18,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
-<link rel="stylesheet" href="bootstrap/css/style.css" />
+    
+<!-- <link rel="stylesheet" href="bootstrap/css/style.css" /> -->
+<?php include('header.php'); ?>
 </head>
 <body>
 
-<div class="header">
-    <h2>Upload Songs</h2>
-    <br>
-    <?php  if (isset($_SESSION['username'])) : ?>
-        <p>Welcome <strong><?php echo $_SESSION['username']; ?></strong></p>
-        <p> <a href="upload.php?logout='1'" style="color: red;">logout</a> </p>
-    <?php endif ?>
-</div>
-<div class="content">
+
+      
+
+<div class="limiter">
+		<div class="container-login100" style="background-image: url('./images/2.jpg');">
+			<div class="wrap-login100">
+      <?php  if (isset($_SESSION['username'])) : ?>
+        <div class="container-login100-form-btn" style="justify-content: right !important;">
+        <a href="upload.php?logout='1'" class="login100-form-btn"> Logout</a>
+                </div>
+                <p style="text-align: center; color: white;">Hello, <?php echo $_SESSION['username']; ?></strong></p>
+                <?php endif ?>
+                <div class="content">
     <!-- notification message -->
     <?php if (isset($_SESSION['success'])) : ?>
       <div class="error success" >
-        <h3>
+      <p style="text-align: center; color: white;">
           <?php 
             echo $_SESSION['success']; 
             unset($_SESSION['success']);
           ?>
-        </h3>
+        </p>
       </div>
     <?php endif ?>
+      <form class="login100-form validate-form" method="post" action="upload.php" enctype="multipart/form-data">
+				
 
-<form method="post" action="upload.php" enctype="multipart/form-data">
-   
-    <div class="input-group">
-      <label>Song Title</label>
-      <input type="text" name="song_title">
-    </div>
-    <div class="input-group">
-      <label>File Name</label>
-      <input type="text" name="file_name" >
-    </div>
-    <div class="input-group">
-      <label>File Format</label>
-      <input type="text" name="file_format">
-    </div>
-    <div class="input-group">
-      <label>Upload Song </label>
-      <input type="file" name="fileToUpload">
-    </div>
-    <div class="input-group">
-      <button type="submit" class="btn" name="upload">Upload</button>
-    </div>
-   
-  </form>
-
-
-    <!-- logged in user information -->
-    
-</div>
+					<span class="login100-form-title p-b-34 p-t-27">
+						Upload Songs
+					</span>
         
+					<div class="wrap-input100 validate-input" data-validate = "Song title">
+						<input class="input100" type="text" name="song_title" placeholder="song title">
+						<span class="focus-input100" data-placeholder="&#xf133;"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate = "File name">
+						<input class="input100" type="text" name="file_name" placeholder="File name">
+						<span class="focus-input100" data-placeholder="&#xf1c;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="File format">
+						<input class="input100" type="text" name="file_format" placeholder="File format">
+						<span class="focus-input100" data-placeholder="&#xf1ea;"></span>
+                    </div>
+                   
+                    
+                    <div class="wrap-input100 validate-input">
+                        <label for="exampleFormControlFile1 " style="color: white;">Select a song</label>
+                        <input type="file" class="" id="exampleFormControlFile1" name="fileToUpload" style="color: white;">
+                      </div>
+
+				
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" name="upload" onclick="setTimeout(myFunction, 3000)" data-toggle="modal" data-target=".bd-example-modal-sm">
+							Upload
+						</button>
+					</div>
+
+                    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content cmodal">
+                            Song has been Uploaded!
+                          </div>
+                        </div>
+                      </div>
+				
+				</form>
+			</div>
+		</div>
+    </div>
+    <?php include('javascript.php'); ?>
 </body>
 </html>
