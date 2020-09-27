@@ -116,12 +116,12 @@ $key = $file_name;    //basename($argv[1]);
 
 try {
 
-// $credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
+$credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
 
 $s3 = new Aws\S3\S3Client([
     'version'     => 'latest',
     'region'      => REGION,
-    // 'credentials' => $credentials
+    'credentials' => $credentials
 ]);
 
     $result = $s3->putObject([
