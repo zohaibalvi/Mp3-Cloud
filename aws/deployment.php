@@ -1,37 +1,36 @@
 <?php
-// https://aws.amazon.com/blogs/developer/provision-an-amazon-ec2-instance-with-php/
 
 require '../vendor/autoload.php';
 include ('../global_constant.php');
 
 
 use Aws\Ec2\Ec2Client;
-$credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
+use Aws\Rds\RdsClient; 
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
+
+
+
+
 
 $ec2Client = Ec2Client::factory(array(
-    // 'key'    => '[aws access key]',
-    // 'secret' => '[aws secret key]',
-    // 'region' => '[aws region]' // (e.g., us-east-1).
 		'version'     => 'latest',	
     	'region'      => REGION,
-        // 'credentials' => $credentials
-
-
 ));
 
+// Create the key pair
 echo "Create the key pair";
 echo "<br>";
-// Create the key pair
 $keyPairName = 'my-keypair';
 $result = $ec2Client->createKeyPair(array(
     'KeyName' => $keyPairName
 ));
 
-// exit;
-echo "Save the private key";
 
 // Save the private key
-$saveKeyLocation = 'C:/Users/user/Desktop'. "/.ssh/{$keyPairName}.pem";//getenv('HOME') . "/.ssh/{$keyPairName}.pem";
+echo "Save the private key";
+echo "<br>";
+$saveKeyLocation = DESKTOP_PATH. "/.ssh/{$keyPairName}.pem";
 
 $data = $result->toArray()['KeyMaterial'];
 file_put_contents($saveKeyLocation, $data);
@@ -39,22 +38,20 @@ file_put_contents($saveKeyLocation, $data);
 // Update the key's permissions so it can be used with SSH
 chmod($saveKeyLocation, 0600);
 
+
+
+// Create the security group
 echo "Create the security group";
 echo "<br>";
-// Create the security group
 $securityGroupName = 'my-security-group';
 $result = $ec2Client->createSecurityGroup(array(
     'GroupName'   => $securityGroupName,
     'Description' => 'Basic web server security'
 ));
 
-// Get the security group ID (optional)
-$securityGroupId = $result->get('GroupId');
-
-
+// Set ingress rules for the security group
 echo "Set ingress rules for the security group";
 echo "<br>";
-// Set ingress rules for the security group
 $ec2Client->authorizeSecurityGroupIngress(array(
     'GroupName'     => $securityGroupName,
     'IpPermissions' => array(
@@ -83,7 +80,6 @@ echo "<br>";
 
 $userData= '#!/bin/bash
 #https://gist.github.com/aamnah/f03c266d715ed479eb46
-
 
 # Update packages and Upgrade system
 echo -e "Updating System.. "
@@ -133,7 +129,7 @@ $userDataEncoded = base64_encode($userData);
 
 // Launch an instance with the key pair and security group
 $result = $ec2Client->runInstances(array(
-    'ImageId'        => 'ami-0dba2cb6798deb6d8',//'ami-570f603e',  //Ubuntu Server 20.04 LTS (HVM), SSD Volume Type
+    'ImageId'        => 'ami-0dba2cb6798deb6d8',
     'MinCount'       => 1,
     'MaxCount'       => 1,
     'InstanceType'   => 't2.micro',//'m1.small',
@@ -142,22 +138,69 @@ $result = $ec2Client->runInstances(array(
     'UserData'      => $userDataEncoded
 ));
 
-$instanceIds = $result->getPath('Instances/*/InstanceId');
-
-// echo "<pre>";
-// print_r($instanceIds);
 
 echo "Wait until the instance is launched";
 echo "<br>";
-// Wait until the instance is launched
-// $ec2Client->waitUntilInstanceRunning(array(
-//     'InstanceIds' => $instanceIds,
-// ));
 
-// echo "Describe the now-running instance to get the public URL";
-// echo "<br>";
-// // Describe the now-running instance to get the public URL
-// $result = $ec2Client->describeInstances(array(
-//     'InstanceIds' => $instanceIds,
-// ));
-// echo current($result->getPath('Reservations/*/Instances/*/PublicDnsName'));
+
+echo '<h1> Now Creating RDS </h1>';
+echo "<br>";
+
+
+//Create a RDSClient
+$rdsClient = new Aws\Rds\RdsClient([
+    'version'     => 'latest',
+    'region'      => REGION,
+]);
+
+$dbIdentifier = RDS_NAME;
+$dbClass = RDS_CLASS;
+$storage = RDS_STORAGE;
+$engine = RDS_ENGINE;
+$username = RDS_USER;
+$password =  RDS_PASSWORD;
+
+try {
+    $result = $rdsClient->createDBInstance([
+        'DBInstanceIdentifier' => $dbIdentifier,
+        'DBInstanceClass' => $dbClass ,
+        'AllocatedStorage' => $storage,
+        'Engine' => $engine,
+        'MasterUsername' => $username,
+        'MasterUserPassword' => $password,
+    ]);
+
+    echo "<pre>";
+    echo "RDS has been created";
+    echo "<br>";
+    // print_r($result->ToArray());
+} catch (AwsException $e) {
+    echo $e->getMessage();
+    echo "\n";
+} 
+
+
+
+echo '<h1> Now Creating s3 bucket </h1>';
+echo "<br>";
+
+$s3 = new Aws\S3\S3Client([
+    'version'     => 'latest',
+    'region'      => REGION,
+]);
+  try {
+    $promise = $s3->createBucketAsync([
+      'Bucket' => BUCKET_NAME,
+      'CreateBucketConfiguration' => [
+        'LocationConstraint' => REGION
+      ]
+    ]);
+
+    $promise->wait();
+
+  } catch (Exception $e) {
+    if ($e->getCode() == 'BucketAlreadyExists') {
+      exit("\nCannot create the bucket. " .
+        "A bucket with the name ".BUCKET_NAME." already exists. Exiting.");
+    }
+  }

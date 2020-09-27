@@ -42,18 +42,42 @@
 
 <!-- https://codepen.io/craigstroman/pen/aOyRYx -->
 <?php
-include('aws/s3.php');
-// include('MP3File.php');
-// use MP3File;
-// filesize("https://ia802900.us.archive.org/16/items/mythium/AC_ATI.mp3");exit;
+// include('./global_constant.php');
+// include('aws/s3.php');
 
+include('./db/connection.php');
 
 // exit;
 $arr_list = array();
 $count = 1;
-$result = listOfAllObjects();
+  $sql = "SELECT * FROM upload_songs WHERE  is_active=0 ";
+  $result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+  // output data of each row
+  while($row = mysqli_fetch_assoc($result)) {
+ 
+ $arr_list[] = array(
+            'track' => $count++,
+            'name' => $row['song_title'],
+            'length' => '5:01',
+            'file' => $row['file_name'],
+
+            ); 
+
+  }
+} else {
+  echo "<b>No Songs uploaded yet!</b>";
+}
+
+// use MP3File;
+// filesize("https://ia802900.us.archive.org/16/items/mythium/AC_ATI.mp3");exit;
+
+
+// $result = '';
+// listOfAllObjects();
 // print_r($result);exit;
- foreach ($result  as $object) {
+ // foreach ($songs  as $row) {
 //     echo S3_URL.$object['Key'] . PHP_EOL;
 //     $mp3file = new MP3File(S3_URL.$object['Key'] . PHP_EOL);
 // // $duration1 = $mp3file->getDurationEstimate();//(faster) for CBR only
@@ -63,241 +87,19 @@ $result = listOfAllObjects();
 // echo MP3File::formatTime($duration2)."\n";
 
 
-        $arr_list[] = array(
-            'track' => $count++,
-            'name' => "nam111e",
-            'length' => 'duration2',
-            'file' => $variable = substr($object['Key'], 0, strpos($object['Key'], "."))
+        // $arr_list[] = array(
+        //     'track' => $count++,
+        //     'name' => $row['song_title'],
+        //     'length' => 'duration2',
+        //     'file' => $row['file_name'],
 
-            ); 
+        //     ); 
             // echo S3_URL.$object['Key'] . PHP_EOL;
 
-    }
-    $mediaPath = "https://zohaib.s3.amazonaws.com/";//S3_URL; //"https://archive.org/download/mythium/BSFM_TF.mp3";
+    // }
 
-// print_r($arr_list);
-// LIST OF SONGS
-// $arr_list  = array ( 
-//   array (
-//     'track' => 1,
-//     'name' => 'All This Is - Joe L.\'s Studio',
-//     'length' => '2:30',
-//     'file' => 'pakistan',
-//   )
-// );
-//   array (
-//     'track' => 2,
-//     'name' => 'The Forsaken - Broadwing Studio (Final Mix)',
-//     'length' => '8:31',
-//     'file' => 'BS_TF',
-//   ), 
-//   array (
-//     'track' => 3,
-//     'name' => 'All The King\'s Men - Broadwing Studio (Final Mix)',
-//     'length' => '5:02',
-//     'file' => 'BS_ATKM',
-//   ), 
-//   array (
-//     'track' => 4,
-//     'name' => 'The Forsaken - Broadwing Studio (First Mix)',
-//     'length' => '8:32',
-//     'file' => 'BSFM_TF',
-//   ), 
-//   array (
-//     'track' => 5,
-//     'name' => 'All The King\'s Men - Broadwing Studio (First Mix)',
-//     'length' => '5:05',
-//     'file' => 'BSFM_ATKM',
-//   ), 
-//   array (
-//     'track' => 6,
-//     'name' => 'All This Is - Alternate Cuts',
-//     'length' => '2:49',
-//     'file' => 'AC_ATI',
-//   ), 
-//   array (
-//     'track' => 7,
-//     'name' => 'All The King\'s Men (Take 1) - Alternate Cuts',
-//     'length' => '5:45',
-//     'file' => 'AC_ATKMTake_1',
-//   ), 
-//   array (
-//     'track' => 8,
-//     'name' => 'All The King\'s Men (Take 2) - Alternate Cuts',
-//     'length' => '5:27',
-//     'file' => 'AC_ATKMTake_2',
-//   ), 
-//   array (
-//     'track' => 9,
-//     'name' => 'Magus - Alternate Cuts',
-//     'length' => '5:46',
-//     'file' => 'AC_M',
-//   ), 
-//   array (
-//     'track' => 10,
-//     'name' => 'The State Of Wearing Address (fucked up) - Alternate Cuts',
-//     'length' => '5:25',
-//     'file' => 'AC_TSOWAfucked_up',
-//   ), 
-//   array (
-//     'track' => 11,
-//     'name' => 'Magus - Popeye\'s (New Years \'04 - \'05)',
-//     'length' => '5:54',
-//     'file' => 'PNY04-05_M',
-//   ), 
-//   array (
-//     'track' => 12,
-//     'name' => 'On The Waterfront - Popeye\'s (New Years \'04 - \'05)',
-//     'length' => '4:41',
-//     'file' => 'PNY04-05_OTW',
-//   ), 
-//   array (
-//     'track' => 13,
-//     'name' => 'Trance - Popeye\'s (New Years \'04 - \'05)',
-//     'length' => '13:17',
-//     'file' => 'PNY04-05_T',
-//   ), 
-//   array (
-//     'track' => 14,
-//     'name' => 'The Forsaken - Popeye\'s (New Years \'04 - \'05)',
-//     'length' => '8:13',
-//     'file' => 'PNY04-05_TF',
-//   ), 
-//   array (
-//     'track' => 15,
-//     'name' => 'The State Of Wearing Address - Popeye\'s (New Years \'04 - \'05)',
-//     'length' => '7:03',
-//     'file' => 'PNY04-05_TSOWA',
-//   ), 
-//   array (
-//     'track' => 16,
-//     'name' => 'Magus - Popeye\'s (Valentine\'s Day \'05)',
-//     'length' => '5:44',
-//     'file' => 'PVD_M',
-//   ), 
-//   array (
-//     'track' => 17,
-//     'name' => 'Trance - Popeye\'s (Valentine\'s Day \'05)',
-//     'length' => '10:47',
-//     'file' => 'PVD_T',
-//   ), 
-//   array (
-//     'track' => 18,
-//     'name' => 'The State Of Wearing Address - Popeye\'s (Valentine\'s Day \'05)',
-//     'length' => '5:37',
-//     'file' => 'PVD_TSOWA',
-//   ), 
-//   array (
-//     'track' => 19,
-//     'name' => 'All This Is - Smith St. Basement (01/08/04)',
-//     'length' => '2:49',
-//     'file' => 'SSB01_08_04_ATI',
-//   ), 
-//   array (
-//     'track' => 20,
-//     'name' => 'Magus - Smith St. Basement (01/08/04)',
-//     'length' => '5:46',
-//     'file' => 'SSB01_08_04_M',
-//   ), 
-//   array (
-//     'track' => 21,
-//     'name' => 'Beneath The Painted Eye - Smith St. Basement (06/06/03)',
-//     'length' => '13:08',
-//     'file' => 'SSB06_06_03_BTPE',
-//   ), 
-//   array (
-//     'track' => 22,
-//     'name' => 'Innocence - Smith St. Basement (06/06/03)',
-//     'length' => '5:16',
-//     'file' => 'SSB06_06_03_I',
-//   ), 
-//   array (
-//     'track' => 23,
-//     'name' => 'Magus - Smith St. Basement (06/06/03)',
-//     'length' => '5:47',
-//     'file' => 'SSB06_06_03_M',
-//   ), 
-//   array (
-//     'track' => 24,
-//     'name' => 'Madness Explored - Smith St. Basement (06/06/03)',
-//     'length' => '4:52',
-//     'file' => 'SSB06_06_03_ME',
-//   ), 
-//   array (
-//     'track' => 25,
-//     'name' => 'The Forsaken - Smith St. Basement (06/06/03)',
-//     'length' => '8:44',
-//     'file' => 'SSB06_06_03_TF',
-//   ), 
-//   array (
-//     'track' => 26,
-//     'name' => 'All This Is - Smith St. Basement (12/28/03)',
-//     'length' => '3:01',
-//     'file' => 'SSB12_28_03_ATI',
-//   ), 
-//   array (
-//     'track' => 27,
-//     'name' => 'Magus - Smith St. Basement (12/28/03)',
-//     'length' => '6:10',
-//     'file' => 'SSB12_28_03_M',
-//   ), 
-//   array (
-//     'track' => 28,
-//     'name' => 'Madness Explored - Smith St. Basement (12/28/03)',
-//     'length' => '5:06',
-//     'file' => 'SSB12_28_03_ME',
-//   ), 
-//   array (
-//     'track' => 29,
-//     'name' => 'Trance - Smith St. Basement (12/28/03)',
-//     'length' => '12:33',
-//     'file' => 'SSB12_28_03_T',
-//   ), 
-//   array (
-//     'track' => 30,
-//     'name' => 'The Forsaken - Smith St. Basement (12/28/03)',
-//     'length' => '8:57',
-//     'file' => 'SSB12_28_03_TF',
-//   ), 
-//   array (
-//     'track' => 31,
-//     'name' => 'All This Is (Take 1) - Smith St. Basement (Nov. \'03)',
-//     'length' => '4:55',
-//     'file' => 'SSB___11_03_ATITake_1',
-//   ), 
-//   array (
-//     'track' => 32,
-//     'name' => 'All This Is (Take 2) - Smith St. Basement (Nov. \'03)',
-//     'length' => '5:46',
-//     'file' => 'SSB___11_03_ATITake_2',
-//   ), 
-//   array (
-//     'track' => 33,
-//     'name' => 'Beneath The Painted Eye (Take 1) - Smith St. Basement (Nov. \'03)',
-//     'length' => '14:06',
-//     'file' => 'SSB___11_03_BTPETake_1',
-//   ), 
-//   array (
-//     'track' => 34,
-//     'name' => 'Beneath The Painted Eye (Take 2) - Smith St. Basement (Nov. \'03)',
-//     'length' => '13:26',
-//     'file' => 'SSB___11_03_BTPETake_2',
-//   ), 
-//   array (
-//     'track' => 35,
-//     'name' => 'The Forsaken (Take 1) - Smith St. Basement (Nov. \'03)',
-//     'length' => '8:38',
-//     'file' => 'SSB___11_03_TFTake_1',
-//   ), 
-//   array (
-//     'track' => 36,
-//     'name' => 'The Forsaken (Take 2) - Smith St. Basement (Nov. \'03)',
-//     'length' => '8:37',
-//     'file' => 'SSB___11_03_TFTake_2',
-//   ),
-// );
+    $mediaPath = "https://zohaib.s3.amazonaws.com/";
 
-// print_r($arr_list);
 ?>
 
 

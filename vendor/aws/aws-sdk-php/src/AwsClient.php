@@ -187,7 +187,6 @@ class AwsClient implements AwsClientInterface
      */
     public function __construct(array $args)
     {
-
         list($service, $exceptionClass) = $this->parseClass();
         if (!isset($args['service'])) {
             $args['service'] = manifest($service)['endpoint'];

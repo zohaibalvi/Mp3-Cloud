@@ -1,7 +1,7 @@
 <?php
 
 require './vendor/autoload.php';
-include ('./global_constant.php');
+// include ('./global_constant.php');
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
   // if ($argc < 4) {
@@ -91,17 +91,19 @@ use Aws\Exception\AwsException;
 
 function uploadFileIntoS3($file_path,$file_name){
 
-   $USAGE = "\n" .
-"To run this example, supply the name of an S3 bucket and a file to\n" .
-"upload to it.\n" .
-"\n" .
-"Ex: php PutObject.php <bucketname> <filename>\n";
+//    $USAGE = "\n" .
+// "To run this example, supply the name of an S3 bucket and a file to\n" .
+// "upload to it.\n" .
+// "\n" .
+// "Ex: php PutObject.php <bucketname> <filename>\n";
+define('BUCKET_NAME', 'zohaib');
+define('REGION', 'us-east-1');
 
 // $file_Path = 'C:\Users\user\Desktop\zohaib.png';
 $argv = array(BUCKET_NAME,$file_path);
 
 
-print_r($argv);
+// print_r($argv);
 // exit();
 if (count($argv) < 2) {
     echo $USAGE;
@@ -114,19 +116,20 @@ $key = $file_name;    //basename($argv[1]);
 
 try {
 
-$credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
+// $credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
 
 $s3 = new Aws\S3\S3Client([
     'version'     => 'latest',
     'region'      => REGION,
-    'credentials' => $credentials
+    // 'credentials' => $credentials
 ]);
 
     $result = $s3->putObject([
         'Bucket' => $bucket,
         'Key' => $key,
         'SourceFile' => $file_path,
-         'ACL'    => 'public-read'
+         'ACL'    => 'public-read',
+         
 
     ]);
 } catch (S3Exception $e) {
@@ -137,12 +140,12 @@ $s3 = new Aws\S3\S3Client([
 
  // uploadFileIntoS3($file_path,'test.png');
 function listOfAllObjects(){
-$credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
+// $credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
 
 $s3 = new Aws\S3\S3Client([
     'version'     => 'latest',
     'region'      => REGION,
-    'credentials' => $credentials
+    // 'credentials' => $credentials
 ]);
 // list of all object
  // Use the plain API (returns ONLY up to 1000 of your objects).
