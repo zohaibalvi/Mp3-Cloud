@@ -1,7 +1,7 @@
 <?php
 
 require '../vendor/autoload.php';
-include ('../global_constant.php');
+// include ('../global_constant.php');
 
 
 use Aws\CloudWatch\CloudWatchClient; 
@@ -48,7 +48,7 @@ use Aws\Exception\AwsException;
  function putMetricAlarm($cloudWatchClient, $cloudWatchRegion, 
     $alarmName, $namespace, $metricName, 
     $dimensions, $statistic, $period, $comparison, $threshold, 
-    $evaluationPeriods,$AlarmActions)
+    $evaluationPeriods,$AlarmActions,$AlarmDescription )
 {
     try {
         $result = $cloudWatchClient->putMetricAlarm([
@@ -61,7 +61,8 @@ use Aws\Exception\AwsException;
             'ComparisonOperator' => $comparison,
             'Threshold' => $threshold,
             'EvaluationPeriods' => $evaluationPeriods,
-            'AlarmActions' => $AlarmActions
+            'AlarmActions' => $AlarmActions,
+            'AlarmDescription' =>$AlarmDescription 
         ]);
         
         if (isset($result['@metadata']['effectiveUri']))
@@ -114,7 +115,7 @@ function putTheMetricAlarm()
     $dimensions = [
         [
             'Name' => 'InstanceId',
-            'Value' => 'i-051381b2dd6264619'
+            'Value' => 'i-002d8e77d8b04080a'   //ec2 instance id
         ]
     ];
     $statistic = 'Average';
@@ -123,20 +124,18 @@ function putTheMetricAlarm()
     $threshold = 1;
     $evaluationPeriods = 1;
 
-    $cloudWatchRegion = REGION;
+    $cloudWatchRegion = 'us-east-1';//REGION;
 
+    // $AlarmDescription = "CPU Utilization of i-1234567890abcdef0 with 40% as threshold",
 
   $AlarmActions = [
     // 'STRING_VALUE',
     // its working
     // 'arn:aws:automate:us-east-1:ec2:stop'
+'arn:aws:sns:us-east-1:372100151213:MyTopic'
 
-    'arn:aws:sns:us-east-1:372100151213:MyTopic'
-    // 'arn:aws:ec2:*:372100151213:instance/i-051381b2dd6264619'
-   // ' arn:aws:automate:region:ec2:stop '
-    // | arn:aws:automate:region:ec2:terminate | arn:aws:automate:region:ec2:recover | arn:aws:automate:region:ec2:reboot | arn:aws:sns:region:account-id:sns-topic-name | arn:aws:autoscaling:region:account-id:scalingPolicy:policy-id:autoScalingGroupName/group-friendly-name:policyName/policy-friendly-name
-    /* more items */
   ];
+   $AlarmDescription = "Instance of id i-1234567890abcdef0 outgoing volumne network is about 1byte as threshold",
     $cloudWatchClient = new CloudWatchClient([
         'profile' => 'default',
         'region' => $cloudWatchRegion,
@@ -147,7 +146,7 @@ function putTheMetricAlarm()
     echo putMetricAlarm($cloudWatchClient, $cloudWatchRegion, 
         $alarmName, $namespace, $metricName, 
         $dimensions, $statistic, $period, $comparison, $threshold, 
-        $evaluationPeriods,$AlarmActions);
+        $evaluationPeriods,$AlarmActions,$AlarmDescription );
 }
 
 // Uncomment the following line to run this code in an AWS account.
