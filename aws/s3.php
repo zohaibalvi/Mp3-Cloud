@@ -128,10 +128,12 @@ $s3 = new Aws\S3\S3Client([
         'Bucket' => $bucket,
         'Key' => $key,
         'SourceFile' => $file_path,
-         'ACL'    => 'public-read',
-         
+        'ACL'    => 'public-read',
+
 
     ]);
+    print_r($result);
+    exit;
 } catch (S3Exception $e) {
     echo $e->getMessage() . "\n";
 }
