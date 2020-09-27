@@ -22,10 +22,7 @@
 <!-- <link rel="stylesheet" href="bootstrap/css/style.css" /> -->
 <?php include('header.php'); ?>
 </head>
-<body>
-
-
-      
+<body>      
 
 <div class="limiter">
 		<div class="container-login100" style="background-image: url('./images/2.jpg');">
@@ -78,7 +75,7 @@
 				
 
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" name="upload" onclick="setTimeout(myFunction, 3000)" data-toggle="modal" data-target=".bd-example-modal-sm">
+						<button class="login100-form-btn" name="upload" data-toggle="modal" data-target=".bd-example-modal-sm">
 							Upload
 						</button>
 					</div>

@@ -1,7 +1,34 @@
 <?php
+
+require './vendor/autoload.php';
 include ('./db/connection.php');
-include ('aws/s3.php');
+// include ('./global_constant.php');
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
+
 session_start();
+
+
+//constant
+define('AWS_ACCESS_KEY_ID', 'ASIAVNIXFW6WSTT6JBNP');
+define('AWS_SECRET_ACCESS_KEY', 'r4FgWej+G5ItVF2lATOq3fnYblLE/4IgffzkHn3X');
+define('TOKEN', 'FwoGZXIvYXdzEAcaDAvX0RRo7e2SSAiXYyLVAQpb1nHg/qhgoYBuP4xmWZqg+UizznERXgT4fpqSELPHtcaGHoqvJsq4HqJHjtopIdqquvQwC4DC+QuCRUI6q0Wmw6ym5VlBwhF7TlReeh+boYx/hqTljZl3mk9OobDV8YOFh4s2hHj94L/pFuLZlm9PmzL+pCnsDAV3xHZjfrYc63BLpPg4hv8owhz6lMxVBjhZegN4XyLiU1oqfqgt9pNOVintXEsxDY6KPBGJuXTjT9/RbhZ2pTPGTaUO5OyTCUnkqQgepAFuJcFtQRg9Vn+fJvDNMyjDhcT7BTItOYqHjikwZ+KUyWcdAuLfLRJuWNxiuFYsgNtTr3/1x/+A1ulTG6cl7UTJxunD');
+
+
+define('BUCKET_NAME', 'zohaib');
+define('REGION', 'us-east-1');
+define('DESKTOP_PATH', 'C:/Users/user/Desktop');
+
+
+//db configuration
+
+define('RDS_HOSTNAME','mp3.chvrcdwgvt0o.us-east-1.rds.amazonaws.com');
+define('RDS_NAME','mp3');
+define('RDS_USER','zohaib');
+define('RDS_PASSWORD','syedzohaibali');
+define('RDS_CLASS','db.t2.micro');
+define('RDS_STORAGE', 5);
+define('RDS_ENGINE','MySQL');
 
 // initializing variables
 $username = "";
@@ -90,12 +117,12 @@ if (isset($_POST['upload'])) {
   $file_path = $_FILES["fileToUpload"]["tmp_name"];
   $path = $_FILES['fileToUpload']['name'];
   // echo "<br>";
-$file_format = pathinfo($path, PATHINFO_EXTENSION);
+  $file_format = pathinfo($path, PATHINFO_EXTENSION);
 
   // receive all input values from the form
   $song_title = mysqli_real_escape_string($conn, $_POST['song_title']);
   $file_name = mysqli_real_escape_string($conn, $_POST['file_name']);
-  $file_format = $file_format; //mysqli_real_escape_string($conn, $_POST['file_format']);
+  $file_format = $file_format; 
 
 
   // form validation: ensure that the form is correctly filled ...
@@ -106,8 +133,7 @@ $file_format = pathinfo($path, PATHINFO_EXTENSION);
   
 
   // Finally, register user if there are no errors in the form
-print_r($_FILES);
-exit;
+
   if (count($errors) == 0) {
 
     $query = "INSERT INTO upload_songs (song_title, file_name, file_format) 
@@ -116,10 +142,47 @@ exit;
 
      uploadFileIntoS3($file_path,$_POST['file_name'].'.'.$file_format);
 
-    // $_SESSION['song_title'] = $username;
-    // $_SESSION['success'] = "You are now logged in";
     header('location: upload.php');
   }
 }
 
+
+// upload file on s3 bucket
+function uploadFileIntoS3($file_path,$file_name){
+
+$argv = array(BUCKET_NAME,$file_path);
+
+if (count($argv) < 2) {
+    echo $USAGE;
+    exit();
+}
+
+$bucket = $argv[0];
+$file_path = $argv[1];
+$key = $file_name;   
+
+try {
+
+$credentials = new Aws\Credentials\Credentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,TOKEN);
+
+
+$s3 = new Aws\S3\S3Client([
+    'version'     => 'latest',
+    'region'      => REGION,
+    'credentials' => $credentials
+]);
+
+    $result = $s3->putObject([
+        'Bucket' => $bucket,
+        'Key' => $key,
+        'SourceFile' => $file_path,
+        'ACL'    => 'public-read',
+
+
+    ]);
+  
+} catch (S3Exception $e) {
+    echo $e->getMessage() . "\n";
+}
+}
 ?>
