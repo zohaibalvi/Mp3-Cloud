@@ -2,39 +2,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Registration system PHP and MySQL</title>
-  <link rel="stylesheet" href="bootstrap/css/style.css" />
+  
+  <?php include('header.php') ?>
 
 </head>
 <body>
-  <div class="header">
-  	<h2>Register</h2>
-  </div>
-	
-  <form method="post" action="register.php">
-  	<?php include('errors.php'); ?>
-  	<div class="input-group">
-  	  <label>Username</label>
-  	  <input type="text" name="username" value="<?php echo $username; ?>">
-  	</div>
-  	<div class="input-group">
-  	  <label>Email</label>
-  	  <input type="email" name="email" value="<?php echo $email; ?>">
-  	</div>
-  	<div class="input-group">
-  	  <label>Password</label>
-  	  <input type="password" name="password_1">
-  	</div>
-  	<div class="input-group">
-  	  <label>Confirm password</label>
-  	  <input type="password" name="password_2">
-  	</div>
-  	<div class="input-group">
-  	  <button type="submit" class="btn" name="reg_user">Register</button>
-  	</div>
-  	<p>
-  		Already a member? <a href="login.php">Sign in</a>
-  	</p>
-  </form>
+  
+
+
+  <div class="limiter">
+		<div class="container-login100" style="background-image: url('./images/2.jpg');">
+			<div class="wrap-login100">
+				<form class="login100-form validate-form" method="post" action="register.php">
+				<?php include('errors.php'); ?>
+					<span class="login100-form-logo">
+						<i class="zmdi zmdi-landscape"></i>
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						Sign Up
+					</span>
+
+					<div class="wrap-input100 validate-input" data-validate = "Enter username">
+						<input class="input100" type="text" name="username" value="<?php echo $username; ?>" placeholder="Username">
+						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate = "Enter mail">
+						<input class="input100" type="text" name="email" value="<?php echo $email; ?>" placeholder="Email">
+						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<input class="input100" type="password" name="password_1" placeholder="Password">
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+                    </div>
+                    <div class="wrap-input100 validate-input" data-validate="Confirm password">
+						<input class="input100" type="password" name="password_2" placeholder="Confirm Password">
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+					</div>
+
+					
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" name="reg_user">
+							Register
+						</button>
+					</div>
+
+					<div class="text-center p-t-20">
+						<a class="txt1" href="login.php">
+							Already a member?
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<?php include('javascript.php'); ?>
 </body>
 </html>
