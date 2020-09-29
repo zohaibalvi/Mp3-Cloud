@@ -1,7 +1,7 @@
 <?php
 
 require '../vendor/autoload.php';
-include ('../global_constant.php');
+// include ('../global_constant.php');
 
 
 use Aws\Ec2\Ec2Client;
@@ -12,6 +12,23 @@ use Aws\Exception\AwsException;
 
 
 
+define('BUCKET_NAME', 'zohaib');
+define('REGION', 'us-east-1');
+define('DESKTOP_PATH', 'C:/Users/user/Desktop');
+
+
+
+
+//db configuration
+
+define('RDS_HOSTNAME','mp3.chvrcdwgvt0o.us-east-1.rds.amazonaws.com');
+define('RDS_NAME','mp3');
+define('RDS_USER','zohaib');
+define('RDS_PASSWORD','syedzohaibali');
+define('RDS_CLASS','db.t2.micro');
+define('RDS_STORAGE', 5);
+define('RDS_ENGINE','MySQL');
+
 
 $ec2Client = Ec2Client::factory(array(
 		'version'     => 'latest',	
@@ -21,7 +38,7 @@ $ec2Client = Ec2Client::factory(array(
 // Create the key pair
 echo "Create the key pair";
 echo "<br>";
-$keyPairName = 'my-keypair';
+$keyPairName = 'my-keypair-ec2';
 $result = $ec2Client->createKeyPair(array(
     'KeyName' => $keyPairName
 ));
@@ -43,7 +60,7 @@ chmod($saveKeyLocation, 0600);
 // Create the security group
 echo "Create the security group";
 echo "<br>";
-$securityGroupName = 'my-security-group';
+$securityGroupName = 'my-security-group-ec2';
 $result = $ec2Client->createSecurityGroup(array(
     'GroupName'   => $securityGroupName,
     'Description' => 'Basic web server security'
@@ -143,64 +160,64 @@ echo "Wait until the instance is launched";
 echo "<br>";
 
 
-echo '<h1> Now Creating RDS </h1>';
-echo "<br>";
+// echo '<h1> Now Creating RDS </h1>';
+// echo "<br>";
 
 
-//Create a RDSClient
-$rdsClient = new Aws\Rds\RdsClient([
-    'version'     => 'latest',
-    'region'      => REGION,
-]);
+// //Create a RDSClient
+// $rdsClient = new Aws\Rds\RdsClient([
+//     'version'     => 'latest',
+//     'region'      => REGION,
+// ]);
 
-$dbIdentifier = RDS_NAME;
-$dbClass = RDS_CLASS;
-$storage = RDS_STORAGE;
-$engine = RDS_ENGINE;
-$username = RDS_USER;
-$password =  RDS_PASSWORD;
+// $dbIdentifier = RDS_NAME;
+// $dbClass = RDS_CLASS;
+// $storage = RDS_STORAGE;
+// $engine = RDS_ENGINE;
+// $username = RDS_USER;
+// $password =  RDS_PASSWORD;
 
-try {
-    $result = $rdsClient->createDBInstance([
-        'DBInstanceIdentifier' => $dbIdentifier,
-        'DBInstanceClass' => $dbClass ,
-        'AllocatedStorage' => $storage,
-        'Engine' => $engine,
-        'MasterUsername' => $username,
-        'MasterUserPassword' => $password,
-    ]);
+// try {
+//     $result = $rdsClient->createDBInstance([
+//         'DBInstanceIdentifier' => $dbIdentifier,
+//         'DBInstanceClass' => $dbClass ,
+//         'AllocatedStorage' => $storage,
+//         'Engine' => $engine,
+//         'MasterUsername' => $username,
+//         'MasterUserPassword' => $password,
+//     ]);
 
-    echo "<pre>";
-    echo "RDS has been created";
-    echo "<br>";
-    // print_r($result->ToArray());
-} catch (AwsException $e) {
-    echo $e->getMessage();
-    echo "\n";
-} 
+//     echo "<pre>";
+//     echo "RDS has been created";
+//     echo "<br>";
+//     // print_r($result->ToArray());
+// } catch (AwsException $e) {
+//     echo $e->getMessage();
+//     echo "\n";
+// } 
 
 
 
-echo '<h1> Now Creating s3 bucket </h1>';
-echo "<br>";
+// echo '<h1> Now Creating s3 bucket </h1>';
+// echo "<br>";
 
-$s3 = new Aws\S3\S3Client([
-    'version'     => 'latest',
-    'region'      => REGION,
-]);
-  try {
-    $promise = $s3->createBucketAsync([
-      'Bucket' => BUCKET_NAME,
-      'CreateBucketConfiguration' => [
-        'LocationConstraint' => REGION
-      ]
-    ]);
+// $s3 = new Aws\S3\S3Client([
+//     'version'     => 'latest',
+//     'region'      => REGION,
+// ]);
+//   try {
+//     $promise = $s3->createBucketAsync([
+//       'Bucket' => BUCKET_NAME,
+//       'CreateBucketConfiguration' => [
+//         'LocationConstraint' => REGION
+//       ]
+//     ]);
 
-    $promise->wait();
+//     $promise->wait();
 
-  } catch (Exception $e) {
-    if ($e->getCode() == 'BucketAlreadyExists') {
-      exit("\nCannot create the bucket. " .
-        "A bucket with the name ".BUCKET_NAME." already exists. Exiting.");
-    }
-  }
+//   } catch (Exception $e) {
+//     if ($e->getCode() == 'BucketAlreadyExists') {
+//       exit("\nCannot create the bucket. " .
+//         "A bucket with the name ".BUCKET_NAME." already exists. Exiting.");
+//     }
+//   }
