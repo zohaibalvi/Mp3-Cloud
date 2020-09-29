@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MP3 APP</title>
+    <title>Cloud MP3 Player</title>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://api.html5media.info/1.1.8/html5media.min.js"></script>
 <link rel="stylesheet" href="bootstrap/css/style.css" />
@@ -14,7 +14,7 @@
     <a class="btn btn-danger" href="login.php"> Login</a>
 
     <div class="column center">
-        <h1>MP3 Player</h1>
+        <h1>Cloud MP3 Player</h1>
     </div>
     <div class="column add-bottom">
         <div id="mainwrap">
