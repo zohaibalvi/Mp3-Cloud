@@ -8,14 +8,13 @@ use Aws\Exception\AwsException;
 
 session_start();
 
-
-//constant
-define('AWS_ACCESS_KEY_ID', 'ASIAVNIXFW6W3SZXZWMD');
-define('AWS_SECRET_ACCESS_KEY', 'OuKnknO91SphcGe0PaQfM8s6CsVf6ZhWfvskJBub');
-define('TOKEN', 'FwoGZXIvYXdzEEwaDAIPbgsbSm91DPY9XSLVASNx4o8bikkbXluTrIFRMFm9Vhdn/9ULxBPefCMqoS/EXZv1DfeDdditnxMphAkVoDDJvcB8dZ9ADiwyAa5G/hp6em6rfkAQW/KVmiRxBCQBjIAfrOFjJBc2ROfF7zBEe3WmXBvJ8DoJjUT0MR99dJmBRACmT03kvj/uGSWMhKwzI6ZlcLngCUQ911lqhEN+ITn+x7I7qKedjbJm9gvZSULwt/lccPFw9dwIqXJtOTuckEpD7BeLxHYYBOag3uif0EQ+71KjaKjobJmi1JkPxwDrZ9X8UCjKn9P7BTItXAq+uVSiiELfzgv4NVsDX/lkmxz4RmxuRokrECO7e59hiSC8/xAW+JbaM/BZ');
-
+//AWS Credential
+define('AWS_ACCESS_KEY_ID', '***********************');
+define('AWS_SECRET_ACCESS_KEY', '***********************');
+define('TOKEN', '***********************');
 
 
+// S3 Bucket
 define('BUCKET_NAME', 'zohaib');
 define('REGION', 'us-east-1');
 define('DESKTOP_PATH', 'C:/Users/user/Desktop');
@@ -36,8 +35,6 @@ $username = "";
 $email    = "";
 $errors = array(); 
 
-// connect to the database
-// $conn = mysqli_connect('localhost', 'root', '', 'mp3');
 
 // REGISTER USER
 if (isset($_POST['reg_user'])) {
@@ -141,7 +138,7 @@ if (isset($_POST['upload'])) {
           VALUES('$song_title', '$file_name', '$file_format')";
     mysqli_query($conn, $query);
 
-     uploadFileIntoS3($file_path,$_POST['file_name'].'.'.$file_format);
+    uploadFileIntoS3($file_path,$_POST['file_name'].'.'.$file_format);
 
     header('location: upload.php');
   }
