@@ -50,11 +50,9 @@ include('./db/connection.php');
 // exit;
 $arr_list = array();
 $count = 1;
+  $sql = "SELECT * FROM upload_songs WHERE  is_active=0 ";
+  $result = mysqli_query($conn, $sql);
 
-$sql = "SELECT * FROM upload_songs WHERE  is_active=0 ";
-if (!empty($conn)) {
-$result = mysqli_query($conn, $sql);
-   
 if (mysqli_num_rows($result) > 0) {
   // output data of each row
   while($row = mysqli_fetch_assoc($result)) {
@@ -72,7 +70,6 @@ if (mysqli_num_rows($result) > 0) {
   echo "<b>No Songs uploaded yet!</b>";
 }
 
-}
 // use MP3File;
 // filesize("https://ia802900.us.archive.org/16/items/mythium/AC_ATI.mp3");exit;
 

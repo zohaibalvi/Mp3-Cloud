@@ -129,13 +129,12 @@ class MultipartCopy extends AbstractUploadManager
         }
 
         list($bucket, $key) = explode('/', ltrim($this->source, '/'), 2);
-        $data['CopySource'] = '/' . $bucket . '/' . implode(
-            '/',
-            array_map(
-                'urlencode',
-                explode('/', rawurldecode($key))
-            )
-        );
+        $data['CopySource'] = '/' . $bucket . '/' . rawurlencode(
+                implode(
+                    '/',
+                    array_map('urlencode', explode('/', $key))
+                )
+            );
         $data['PartNumber'] = $partNumber;
 
         $defaultPartSize = $this->determinePartSize();
