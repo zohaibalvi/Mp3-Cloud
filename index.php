@@ -40,66 +40,35 @@
 </body>
 </html>
 
-<!-- https://codepen.io/craigstroman/pen/aOyRYx -->
 <?php
-// include('./global_constant.php');
-// include('aws/s3.php');
+
 
 include('./db/connection.php');
 
-// exit;
 $arr_list = array();
 $count = 1;
   $sql = "SELECT * FROM upload_songs WHERE  is_active=0 ";
+ if( !empty($conn) ){
   $result = mysqli_query($conn, $sql);
-
-if (mysqli_num_rows($result) > 0) {
-  // output data of each row
-  while($row = mysqli_fetch_assoc($result)) {
  
- $arr_list[] = array(
-            'track' => $count++,
-            'name' => $row['song_title'],
-            'length' => '5:01',
-            'file' => $row['file_name'],
-
-            ); 
-
-  }
-} else {
-  echo "<b>No Songs uploaded yet!</b>";
+ if (mysqli_num_rows($result) > 0) {
+   // output data of each row
+   while($row = mysqli_fetch_assoc($result)) {
+  
+  $arr_list[] = array(
+             'track' => $count++,
+             'name' => $row['song_title'],
+             'length' => '5:01',
+             'file' => $row['file_name'],
+ 
+             ); 
+ 
+   }
+ } else {
+   echo "<b>No Songs uploaded yet!</b>";
+ }
 }
-
-// use MP3File;
-// filesize("https://ia802900.us.archive.org/16/items/mythium/AC_ATI.mp3");exit;
-
-
-// $result = '';
-// listOfAllObjects();
-// print_r($result);exit;
-
- // foreach ($songs  as $row) {
-//     echo S3_URL.$object['Key'] . PHP_EOL;
-//     $mp3file = new MP3File(S3_URL.$object['Key'] . PHP_EOL);
-// // $duration1 = $mp3file->getDurationEstimate();//(faster) for CBR only
-// $duration2 = $mp3file->getDuration();//(slower) for VBR (or CBR)
-// // echo "duration: $duration1 seconds"."\n";
-// echo "estimate: $duration2 seconds"."\n";
-// echo MP3File::formatTime($duration2)."\n";
-
-
-        // $arr_list[] = array(
-        //     'track' => $count++,
-        //     'name' => $row['song_title'],
-        //     'length' => 'duration2',
-        //     'file' => $row['file_name'],
-
-        //     ); 
-            // echo S3_URL.$object['Key'] . PHP_EOL;
-
-    // }
-
-    $mediaPath = "https://zohaib.s3.amazonaws.com/";
+$mediaPath = "https://zohaib.s3.amazonaws.com/";
 
 
 ?>
